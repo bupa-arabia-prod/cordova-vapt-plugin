@@ -1,0 +1,21 @@
+{
+  "name": "com.outsystems.vapt",
+  "version": "1.0.0",
+  "description": "",
+  "cordova": {
+    "id": "com.outsystems.vapt",
+    "platforms": []
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "outsystems",
+    "android",
+    "ios:cordova"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "plist": "^3.0.1",
+    "q": "^1.5.1"
+  }
+}

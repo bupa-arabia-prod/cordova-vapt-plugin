@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.outsystems.vapt" version="1.0.0"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>cordova Vapt plugin</name>
+
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="vapt">
+                <param name="android-package" value="com.outsystems.vapt" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml" />
+
+        
+        <hook type="before_prepare" src="hooks/android/manifestModifier.js" />
+    </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="vapt">
+                <param name="ios-package" value="vapt" />
+            </feature>
+        </config-file>
+        <hook type="before_prepare" src="hooks/ios/plistModifier.js" />
+    </platform>
+</plugin>

@@ -1,0 +1,7 @@
+{
+  "outsystems.com": {
+    "NSIncludesSubdomains": true,
+    "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
+    "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.1"
+  }
+}
