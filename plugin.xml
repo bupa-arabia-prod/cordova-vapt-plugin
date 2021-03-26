@@ -4,6 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>cordova Vapt plugin</name>
 
+    <js-module src="www/vapt.js" name="vapt">
+        <clobbers target="VAPT" />
+    </js-module>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="vapt">
