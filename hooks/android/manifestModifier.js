@@ -6,13 +6,12 @@ var {isCordovaAbove} = require("../utils");
 var allowBackup;
 
 function replacerAllowBackup(match, p1, p2, p3, offset, string){
-  if(p2){
-    if(p2.includes("allowBackup")){
-      p2 = p2.repalce((!allowBackup).toString(),allowBackup.toString());
-      return [p1,p2,p3].join("");
+    if(p2){
+        p2 = p2.replace((!allowBackup).toString(),allowBackup.toString());
+        return [p1,p2,p3].join("");
+    }else{
+      return [p1,' android:allowBackup="'+allowBackup.toString()+'" ',p3].join("");
     }
-  }
-  return [p1,' android:allowBackup="'+allowBackup.toString()+'" ',p3].join("");
   }
 
   function replacerWriteExternalStorage(match, p1, p2, p3, offset, string){
@@ -47,16 +46,16 @@ module.exports = function (context) {
     var manifest = fs.readFileSync(manifestPath, "utf8");
 
     allowBackup = jsonObj.allowBackup;
-    var regexAllowBackup = /(<\?xml [\s|\S]*<application.*)(android:allowBackup=".*")*(>[\s|\S]*<\/manifest>)/gm;
+    var regexAllowBackup = /(<\?xml [\s|\S]*<application.*)(android:allowBackup=".*")(>[\s|\S]*<\/manifest>)/gm;
     manifest = manifest.replace(regexAllowBackup,replacerAllowBackup);
 
     if(jsonObj.removeReadExternal){
-      var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.READ_EXTERNAL_STORAGE" \/>)*([\s|\S]*<\/manifest>)/gm;
+      var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.READ_EXTERNAL_STORAGE" \/>)([\s|\S]*<\/manifest>)/gm;
       manifest = manifest.replace(regexWriteExternalStorage,replacerWriteExternalStorage);
     }
 
     if(jsonObj.removeWriteExternal){
-      var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.WRITE_EXTERNAL_STORAGE" \/>)*([\s|\S]*<\/manifest>)/gm;
+      var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.WRITE_EXTERNAL_STORAGE" \/>)([\s|\S]*<\/manifest>)/gm;
       manifest = manifest.replace(regexWriteExternalStorage,replacerWriteExternalStorage);
     }
 
