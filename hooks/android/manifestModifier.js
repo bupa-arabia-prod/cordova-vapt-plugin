@@ -3,14 +3,16 @@ var fs = require('fs');
 var path = require('path');
 var {isCordovaAbove} = require("../utils");
 
+var allowBackup;
+
 function replacerAllowBackup(match, p1, p2, p3, offset, string){
   if(p2){
     if(p2.includes("allowBackup")){
-      p2 = p2.repalce("true","false");
+      p2 = p2.repalce((!allowBackup).toString(),allowBackup.toString());
       return [p1,p2,p3].join("");
     }
   }
-  return [p1,' android:allowBackup="false" ',p3].join("");
+  return [p1,' android:allowBackup="'+allowBackup.toString()+'" ',p3].join("");
   }
 
   function replacerWriteExternalStorage(match, p1, p2, p3, offset, string){
@@ -28,15 +30,35 @@ module.exports = function (context) {
       deferral = context.requireCordovaModule("q").defer();
     }
 
+    var configPath = path.join(context.opts.projectRoot,"www", "vapt", "config.json");
+
+    try {
+      jsonconfig = fs.readFileSync(configPath, "utf8");
+    }
+    catch (e) {
+      console.warn("Error in configuration File : " + e.message);
+    }
+
+    jsonObj = JSON.parse(jsonconfig)
+    jsonObj = jsonObj.android;
+
     var projectRoot = context.opts.cordova.project ? context.opts.cordova.project.root : context.opts.projectRoot;
     var manifestPath = path.join(projectRoot,"platforms","android","app","src","main","AndroidManifest.xml");
     var manifest = fs.readFileSync(manifestPath, "utf8");
 
+    allowBackup = jsonObj.allowBackup;
     var regexAllowBackup = /(<\?xml [\s|\S]*<application.*)(android:allowBackup=".*")*(>[\s|\S]*<\/manifest>)/gm;
     manifest = manifest.replace(regexAllowBackup,replacerAllowBackup);
 
-    var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.WRITE_EXTERNAL_STORAGE" \/>)*([\s|\S]*<\/manifest>)/gm;
-    manifest = manifest.replace(regexWriteExternalStorage,replacerWriteExternalStorage);
+    if(jsonObj.removeReadExternal){
+      var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.READ_EXTERNAL_STORAGE" \/>)*([\s|\S]*<\/manifest>)/gm;
+      manifest = manifest.replace(regexWriteExternalStorage,replacerWriteExternalStorage);
+    }
+
+    if(jsonObj.removeWriteExternal){
+      var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.WRITE_EXTERNAL_STORAGE" \/>)*([\s|\S]*<\/manifest>)/gm;
+      manifest = manifest.replace(regexWriteExternalStorage,replacerWriteExternalStorage);
+    }
 
     
     fs.writeFileSync(manifestPath, manifest);

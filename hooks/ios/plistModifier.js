@@ -129,19 +129,26 @@ module.exports = function (context) {
        plist = context.requireCordovaModule("plist");
        deferral = context.requireCordovaModule("q").defer();
     }
-    console.log("Started PList change!")
-    let pathToPList = searchForPListFile(context.opts.projectRoot);
-    addOrReplaceNSAppTransportSecurityConfig(pathToPList,"NSAllowsArbitraryLoads",false,true);
-    addOrReplaceNSAppTransportSecurityConfig(pathToPList,"NSAllowsArbitraryLoadsInWebContent",false,true);
-
+    var jsonconfig;
     var configPath = path.join(context.opts.projectRoot,"www", "vapt", "config.json");
+
+    console.log("Started PList change!")
     try {
         jsonconfig = fs.readFileSync(configPath, "utf8");
-        addOrReplaceNSAppTransportSecurityConfig(pathToPList,"NSExceptionDomains",jsonconfig,false);
     }
     catch (e) {
         console.warn("Error in configuration File : " + e.message);
     }
+    let pathToPList = searchForPListFile(context.opts.projectRoot);
+    jsonObj = JSON.parse(jsonconfig)
+    jsonObj = jsonObj.ios;
+    for(let j = 0;j<jsonObj.length;j++){
+        for(key in jsonObj[j]){
+            var value = jsonObj[j][key];
+            addOrReplaceNSAppTransportSecurityConfig(pathToPList,key,value,!(typeof yourVariable === 'object' && yourVariable !== null));
+        }
+    }
+    
     console.log("Ended PList change!");
 
     deferral.resolve();

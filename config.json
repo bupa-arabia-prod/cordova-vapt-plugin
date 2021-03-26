@@ -1,7 +1,19 @@
 {
-  "outsystems.com": {
-    "NSIncludesSubdomains": true,
-    "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
-    "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.1"
-  }
+  "android":{
+    "allowBackup":false,
+    "removeReadExternal":true,
+    "removeWriteExternal":true
+  },
+  "ios":[
+    {"NSAllowsArbitraryLoads":false},
+    {"NSAllowsArbitraryLoadsInWebContent":false},
+    {"NSExceptionDomains":
+      {"outsystems.com": {
+        "NSIncludesSubdomains": true,
+        "NSTemporaryExceptionAllowsInsecureHTTPLoads": true,
+        "NSTemporaryExceptionMinimumTLSVersion": "TLSv1.1"
+        }
+      }
+    }
+  ]
 }
