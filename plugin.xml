@@ -19,7 +19,7 @@
         <config-file parent="/*" target="AndroidManifest.xml" />
 
         
-        <hook type="before_build" src="hooks/android/manifestModifier.js" />
+        <hook type="after_prepare" src="hooks/android/manifestModifier.js" />
     </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
@@ -27,6 +27,6 @@
                 <param name="ios-package" value="vapt" />
             </feature>
         </config-file>
-        <hook type="before_build" src="hooks/ios/plistModifier.js" />
+        <hook type="after_prepare" src="hooks/ios/plistModifier.js" />
     </platform>
 </plugin>
