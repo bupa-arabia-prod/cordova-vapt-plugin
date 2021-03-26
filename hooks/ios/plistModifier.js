@@ -18,10 +18,10 @@ function addOrReplaceNSAppTransportSecurityConfig(file,key,value,toReplace) {
             for (let ATSKeys in pListObj[property]){
                 if (ATSKeys.localeCompare(key) == 0) {
                     if(toReplace){
-                        pListObj[property] = value;
+                        pListObj[property][key] = value;
                     }else{
                         let json = JSON.parse(value);
-                        pListObj[NSAppTransportSecurity] = Object.assign(pListObj[NSAppTransportSecurity], json);
+                        pListObj[property][key] = Object.assign(pListObj[NSAppTransportSecurity], json);
                     }
                     existskey = true;
                 }
@@ -145,7 +145,7 @@ module.exports = function (context) {
     for(let j = 0;j<jsonObj.length;j++){
         for(key in jsonObj[j]){
             var value = jsonObj[j][key];
-            addOrReplaceNSAppTransportSecurityConfig(pathToPList,key,value,!(typeof yourVariable === 'object' && yourVariable !== null));
+            addOrReplaceNSAppTransportSecurityConfig(pathToPList,key,JSON.stringify(value),!(typeof value === 'object' && value !== null));
         }
     }
     
