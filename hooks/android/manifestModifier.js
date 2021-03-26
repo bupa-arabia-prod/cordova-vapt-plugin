@@ -6,11 +6,16 @@ var {isCordovaAbove} = require("../utils");
 var allowBackup;
 
 function replacerAllowBackup(match, p1, p2, p3, offset, string){
-    if(p2){
-        p2 = p2.replace((!allowBackup).toString(),allowBackup.toString());
-        return [p1,p2,p3].join("");
+    p2 = p2.replace((!allowBackup).toString(),allowBackup.toString());
+    return [p1,p2,p3].join("");
+  }
+  function adderAllowBackup(match, p1, p2, offset, string){
+    if(p2.includes("allowBackup")){
+        var regexAllowBackup = /(<\?xml [\s|\S]*<application.*)(android:allowBackup=".*")(.*>[\s|\S]*<\/manifest>)/gm;
+        var fullmanifest =  [p1,p2].join("");
+        return fullmanifest.replace(regexAllowBackup,replacerAllowBackup);
     }else{
-      return [p1,' android:allowBackup="'+allowBackup.toString()+'" ',p3].join("");
+      return [p1,' android:allowBackup="'+allowBackup.toString()+'" ',p2].join("");
     }
   }
 
@@ -46,8 +51,8 @@ module.exports = function (context) {
     var manifest = fs.readFileSync(manifestPath, "utf8");
 
     allowBackup = jsonObj.allowBackup;
-    var regexAllowBackup = /(<\?xml [\s|\S]*<application.*)(android:allowBackup=".*")(>[\s|\S]*<\/manifest>)/gm;
-    manifest = manifest.replace(regexAllowBackup,replacerAllowBackup);
+    var regexApplication = /(<\?xml [\s|\S]*<application)(.*>[\s|\S]*<\/manifest>)/gm;
+    manifest = manifest.replace(regexApplication,adderAllowBackup);
 
     if(jsonObj.removeReadExternal){
       var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.READ_EXTERNAL_STORAGE" \/>)([\s|\S]*<\/manifest>)/gm;
