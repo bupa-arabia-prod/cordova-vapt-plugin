@@ -122,9 +122,6 @@ function isDirectoryFiltered(dirPath, filteredDirectories) {
 }
 module.exports = function (context) {
     var deferral;
-    if (cordovaAbove8) {
-      } else {
-      }
     if(isCordovaAbove(context, 8)){
        plist = require("plist");
        deferral = require('q').defer();
