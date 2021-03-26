@@ -1,6 +1,7 @@
-const plist = require("plist");
+var plist;
 const path = require("path");
 const fs = require("fs");
+const {isCordovaAbove} = require("../utils");
 
 const  NSAppTransportSecurity = "NSAppTransportSecurity";
 const DIR_SEARCH_EXCEPTION = ["build", "cordova", "CordovaLib"];
@@ -120,6 +121,17 @@ function isDirectoryFiltered(dirPath, filteredDirectories) {
     return false;
 }
 module.exports = function (context) {
+    var deferral;
+    if (cordovaAbove8) {
+      } else {
+      }
+    if(isCordovaAbove(context, 8)){
+       plist = require("plist");
+       deferral = require('q').defer();
+    }else{
+       plist = context.requireCordovaModule("plist");
+       deferral = context.requireCordovaModule("q").defer();
+    }
     console.log("Started PList change!")
     let pathToPList = searchForPListFile(context.opts.projectRoot);
     addOrReplaceNSAppTransportSecurityConfig(pathToPList,"NSAllowsArbitraryLoads",false,true);
@@ -133,6 +145,10 @@ module.exports = function (context) {
     catch (e) {
         console.warn("Error in configuration File : " + e.message);
     }
-    console.log("Ended PList change!")
+    console.log("Ended PList change!");
+
+    deferral.resolve();
+
+    return deferral.promise;
     //'{"outsystems.com":{"NSIncludesSubdomains":true,"NSTemporaryExceptionAllowsInsecureHTTPLoads":true,"NSTemporaryExceptionMinimumTLSVersion":"TLSv1.1"}}'
 }
