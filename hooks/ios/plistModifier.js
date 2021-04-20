@@ -41,6 +41,16 @@ function addOrReplaceNSAppTransportSecurityConfig(file,key,value,toReplace) {
         let json = JSON.parse(jsonString);
         pListObj[NSAppTransportSecurity] = Object.assign({}, json);
     }
+
+    //Fixes crash on BUPA app. Plist structure is not well created.
+    //This is related to the https://github.com/TooTallNate/plist.js/issues/79
+    if (pListObj["NSMainNibFile"] == null) {
+        pListObj["NSMainNibFile"] = '';
+    }
+    if (pListObj["NSMainNibFile~ipad"] == null) {
+        pListObj["NSMainNibFile~ipad"] = '';
+    }
+    
     fs.writeFileSync(file, plist.build(pListObj));
 }
 

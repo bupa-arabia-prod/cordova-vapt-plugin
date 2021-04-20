@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "plist": "^3.0.1",
+    "plist": "^3.0.2",
     "q": "^1.5.1"
   }
 }
