@@ -4,6 +4,7 @@ var path = require('path');
 var {isCordovaAbove} = require("../utils");
 
 var allowBackup;
+var debuggable;
 
 function replacerAllowBackup(match, p1, p2, p3, offset, string){
   p2 = p2.replace((!allowBackup).toString(),allowBackup.toString());
@@ -19,6 +20,22 @@ function adderAllowBackup(match, p1, p2, offset, string){
     return [p1,' ' + 'tools:replace="android:allowBackup" android:allowBackup="'+allowBackup.toString()+'" ',p2].join("");
   }
 }
+
+function replacerDebuggable(match, p1, p2, p3, offset, string){
+  p2 = p2.replace((!debuggable).toString(),debuggable.toString());
+  p2 += ' ' + 'tools:replace="android:debuggable"';
+  return [p1,p2,p3].join("");
+}
+function adderDebuggable(match, p1, p2, offset, string){
+  if(p2.includes("debuggable")){
+    var regexDebuggable = /(<\?xml [\s|\S]*<application.*)(android:debuggable=".*")(.*>[\s|\S]*<\/manifest>)/gm;
+    var fullmanifest =  [p1,p2].join("");
+    return fullmanifest.replace(regexDebuggable,replacerDebuggable);
+  }else{
+    return [p1,' ' + 'tools:replace="android:debuggable" android:debuggable="'+debuggable.toString()+'" ',p2].join("");
+  }
+}
+
 
 function replacerWriteExternalStorage(match, p1, p2, p3, offset, string){
   return [p1,p3].join("");
@@ -52,8 +69,11 @@ module.exports = function (context) {
     var manifest = fs.readFileSync(manifestPath, "utf8");
 
     allowBackup = jsonObj.allowBackup;
+    debuggable = jsonObj.debuggable;
+  
     var regexApplication = /(<\?xml [\s|\S]*<application)(.*>[\s|\S]*<\/manifest>)/gm;
     manifest = manifest.replace(regexApplication,adderAllowBackup);
+    manifest = manifest.replace(regexApplication,adderDebuggable);
 
     //add tools namespace to override any other values for allowBackup
     const toolsAttribute = "xmlns:tools=\"http://schemas.android.com/tools\"";
