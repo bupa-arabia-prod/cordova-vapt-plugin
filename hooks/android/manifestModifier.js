@@ -73,7 +73,7 @@ module.exports = function (context) {
   
     var regexApplication = /(<\?xml [\s|\S]*<application)(.*>[\s|\S]*<\/manifest>)/gm;
     manifest = manifest.replace(regexApplication,adderAllowBackup);
-    //manifest = manifest.replace(regexApplication,adderDebuggable);
+    
 
     //add tools namespace to override any other values for allowBackup
     const toolsAttribute = "xmlns:tools=\"http://schemas.android.com/tools\"";
@@ -83,7 +83,13 @@ module.exports = function (context) {
       manifest = manifest.replace(manifestOpen, manifestOpen + " " + toolsAttribute + " ");
     }
     //end add tools namespace
-
+  
+    manifest = manifest.replace(regexApplication,adderDebuggable);
+    if(manifest.indexOf(toolsAttribute) == -1) {
+      manifest = manifest.replace(manifestOpen, manifestOpen + " " + toolsAttribute + " ");
+    }  
+  
+  
     if(jsonObj.removeReadExternal){
       var regexWriteExternalStorage = /(<\?xml [\s|\S]*)(<uses-permission android:name="android\.permission\.READ_EXTERNAL_STORAGE" \/>)([\s|\S]*<\/manifest>)/gm;
       manifest = manifest.replace(regexWriteExternalStorage,replacerWriteExternalStorage);
