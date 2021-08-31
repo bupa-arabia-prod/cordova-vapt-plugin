@@ -73,7 +73,7 @@ module.exports = function (context) {
   
     var regexApplication = /(<\?xml [\s|\S]*<application)(.*>[\s|\S]*<\/manifest>)/gm;
     manifest = manifest.replace(regexApplication,adderAllowBackup);
-    manifest = manifest.replace(regexApplication,adderDebuggable);
+    //manifest = manifest.replace(regexApplication,adderDebuggable);
 
     //add tools namespace to override any other values for allowBackup
     const toolsAttribute = "xmlns:tools=\"http://schemas.android.com/tools\"";
