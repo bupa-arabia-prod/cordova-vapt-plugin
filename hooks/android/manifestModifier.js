@@ -32,7 +32,7 @@ function adderDebuggable(match, p1, p2, offset, string){
     var fullmanifest =  [p1,p2].join("");
     return fullmanifest.replace(regexDebuggable,replacerDebuggable);
   }else{
-    return [p1,' ' + ' android:debuggable=false ',p2].join("");
+    return [p1,' ' + ' android:debuggable="false" ',p2].join("");
   }
 }
 
