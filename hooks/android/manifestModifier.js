@@ -22,7 +22,7 @@ function adderAllowBackup(match, p1, p2, offset, string){
 }
 
 function replacerDebuggable(match, p1, p2, p3, offset, string){
-  p2 = p2.replace((!debuggable).toString(),debuggable.toString());
+  p2 = p2.replace((!debuggable).toString(),"false");
   //p2 += ' ' + 'tools:replace="android:debuggable"';
   return [p1,p2,p3].join("");
 }
@@ -32,7 +32,7 @@ function adderDebuggable(match, p1, p2, offset, string){
     var fullmanifest =  [p1,p2].join("");
     return fullmanifest.replace(regexDebuggable,replacerDebuggable);
   }else{
-    return [p1,' ' + ' android:debuggable="'+debuggable.toString()+'" ',p2].join("");
+    return [p1,' ' + ' android:debuggable="'false'" ',p2].join("");
   }
 }
 
