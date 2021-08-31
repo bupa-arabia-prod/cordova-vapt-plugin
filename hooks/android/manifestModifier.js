@@ -85,9 +85,9 @@ module.exports = function (context) {
     //end add tools namespace
   
     manifest = manifest.replace(regexApplication,adderDebuggable);
-    if(manifest.indexOf(toolsAttribute) == -1) {
-      manifest = manifest.replace(manifestOpen, manifestOpen + " " + toolsAttribute + " ");
-    }  
+    //if(manifest.indexOf(toolsAttribute) == -1) {
+      //manifest = manifest.replace(manifestOpen, manifestOpen + " " + toolsAttribute + " ");
+   // }  
   
   
     if(jsonObj.removeReadExternal){
