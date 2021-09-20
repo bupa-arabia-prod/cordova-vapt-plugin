@@ -21,7 +21,7 @@ function adderAllowBackup(match, p1, p2, offset, string){
   }
 }
 
-function replacerDebuggable(match, p1, p2, p3, offset, string){
+/*function replacerDebuggable(match, p1, p2, p3, offset, string){
   p2 = p2.replace((!debuggable).toString(),"false");
   //p2 += ' ' + 'tools:replace="android:debuggable"';
   return [p1,p2,p3].join("");
@@ -35,7 +35,7 @@ function adderDebuggable(match, p1, p2, offset, string){
     return [p1,' ' + ' android:debuggable="false" ',p2].join("");
   }
 }
-
+*/
 
 function replacerWriteExternalStorage(match, p1, p2, p3, offset, string){
   return [p1,p3].join("");
@@ -84,7 +84,7 @@ module.exports = function (context) {
     }
     //end add tools namespace
   
-    manifest = manifest.replace(regexApplication,adderDebuggable);
+    //manifest = manifest.replace(regexApplication,adderDebuggable);
     //if(manifest.indexOf(toolsAttribute) == -1) {
       //manifest = manifest.replace(manifestOpen, manifestOpen + " " + toolsAttribute + " ");
    // }  
